@@ -16,6 +16,7 @@ from flask import Flask, request, render_template, session, flash, redirect, url
 from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, Api, reqparse, fields
 from flask_restful_swagger import swagger
+from flask_cors import CORS
 import celery.events.state
 from celery import Celery
 
@@ -26,6 +27,7 @@ from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleReque
 io_q = Queue()
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 auth = HTTPBasicAuth()
 
 this_path = sys.path[0]
