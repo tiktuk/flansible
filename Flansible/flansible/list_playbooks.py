@@ -47,9 +47,7 @@ class Playbooks(Resource):
                 playbook_text = open(playbook_filename).read()
                 ast = env.parse(playbook_text)
                 playbook_variables = list(meta.find_undeclared_variables(ast))
-                
-                if len(playbook_variables) > 0:
-                    fileobj.update(variables=playbook_variables)
+                fileobj.update(variables=playbook_variables)
                 
                 returnedfiles.append(fileobj)
         
