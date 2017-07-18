@@ -5,8 +5,10 @@ from flansible import app
 from flansible import api, app, celery, playbook_root, auth
 from flansible import verify_password, get_inventory_access
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
+from jinja2 import Environment, meta
 
 import celery_runner
+
 
 class Playbooks(Resource):
     @swagger.operation(
@@ -29,7 +31,9 @@ class Playbooks(Resource):
                     fileobj = {'playbook': name, 'playbook_dir': root}
                     yamlfiles.append(fileobj)
         
+        env = Environment()
         returnedfiles = []
+        
         for fileobj in yamlfiles:
             if 'group_vars' in fileobj['playbook_dir']:
                 pass
@@ -38,8 +42,17 @@ class Playbooks(Resource):
             elif fileobj['playbook_dir'].endswith('vars'):
                 pass
             else:
+                # Parse the playbook for variables
+                playbook_filename = '%s/%s' % (fileobj['playbook_dir'], fileobj['playbook'])
+                playbook_text = open(playbook_filename).read()
+                ast = env.parse(playbook_text)
+                playbook_variables = list(meta.find_undeclared_variables(ast))
+                
+                if len(playbook_variables) > 0:
+                    fileobj.update(variables=playbook_variables)
+                
                 returnedfiles.append(fileobj)
-
+        
         return returnedfiles
 
 
