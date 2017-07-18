@@ -17,7 +17,7 @@ class RunAnsiblePlaybook(Resource):
         parameters=[
             {
                 "name": "body",
-                "description": "Inut object",
+                "description": "Input object",
                 "required": True,
                 "allowMultiple": False,
                 "dataType": AnsiblePlaybookModel.__name__,
