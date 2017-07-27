@@ -10,6 +10,17 @@ from jinja2 import Environment, meta
 import celery_runner
 
 
+def find_variables(template_filename):
+    # Parse the playbook for variables
+    # Takes a filename as input and returns a list uf variables
+    with open(template_filename) as f:
+        template_text = f.read()
+        env = Environment()
+        ast = env.parse(template_text)
+        
+        return list(meta.find_undeclared_variables(ast))
+
+
 class Playbooks(Resource):
     @swagger.operation(
         notes='List ansible playbooks. Configure search root in config.ini',
@@ -31,7 +42,6 @@ class Playbooks(Resource):
                     fileobj = {'playbook': name, 'playbook_dir': root}
                     yamlfiles.append(fileobj)
         
-        env = Environment()
         returnedfiles = []
         
         for fileobj in yamlfiles:
@@ -44,9 +54,7 @@ class Playbooks(Resource):
             else:
                 # Parse the playbook for variables
                 playbook_filename = '%s/%s' % (fileobj['playbook_dir'], fileobj['playbook'])
-                playbook_text = open(playbook_filename).read()
-                ast = env.parse(playbook_text)
-                playbook_variables = list(meta.find_undeclared_variables(ast))
+                playbook_variables = find_variables(playbook_filename)
                 fileobj.update(variables=playbook_variables)
                 
                 returnedfiles.append(fileobj)
