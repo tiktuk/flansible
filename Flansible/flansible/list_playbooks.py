@@ -5,20 +5,19 @@ from flansible import app
 from flansible import api, app, celery, playbook_root, auth
 from flansible import verify_password, get_inventory_access
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
-from jinja2 import Environment, meta
+from jinja2 import Environment, FileSystemLoader, meta
 
 import celery_runner
 
 
-def find_variables(template_filename):
-    # Parse the playbook for variables
-    # Takes a filename as input and returns a list uf variables
-    with open(template_filename) as f:
-        template_text = f.read()
-        env = Environment()
-        ast = env.parse(template_text)
-        
-        return list(meta.find_undeclared_variables(ast))
+def find_variables(template_dir, filename):
+    # Parse the template for variables
+    # Takes a directory with templates and a filename within as input and returns a list uf variables
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template_source = env.loader.get_source(env, filename)[0]
+    ast = env.parse(template_source)
+    
+    return list(meta.find_undeclared_variables(ast))
 
 
 class Playbooks(Resource):
@@ -53,10 +52,12 @@ class Playbooks(Resource):
                 pass
             else:
                 # Parse the playbook for variables
-                playbook_filename = '%s/%s' % (fileobj['playbook_dir'], fileobj['playbook'])
-                playbook_variables = find_variables(playbook_filename)
-                fileobj.update(variables=playbook_variables)
+                playbook_variables = find_variables(
+                    fileobj['playbook_dir'],
+                    fileobj['playbook']
+                )
                 
+                fileobj.update(variables=playbook_variables)
                 returnedfiles.append(fileobj)
         
         return returnedfiles
