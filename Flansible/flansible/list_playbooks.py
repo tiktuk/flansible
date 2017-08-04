@@ -9,15 +9,7 @@ from jinja2 import Environment, FileSystemLoader, meta
 
 import celery_runner
 
-
-def find_variables(template_dir, filename):
-    # Parse the template for variables
-    # Takes a directory with templates and a filename within as input and returns a list uf variables
-    env = Environment(loader=FileSystemLoader(template_dir))
-    template_source = env.loader.get_source(env, filename)[0]
-    ast = env.parse(template_source)
-    
-    return list(meta.find_undeclared_variables(ast))
+from tdh_utils import playbook_as_schema
 
 
 class Playbooks(Resource):
@@ -52,12 +44,12 @@ class Playbooks(Resource):
                 pass
             else:
                 # Parse the playbook for variables
-                playbook_variables = find_variables(
+                playbook_schema, _, _ = playbook_as_schema(
                     fileobj['playbook_dir'],
                     fileobj['playbook']
                 )
                 
-                fileobj.update(variables=playbook_variables)
+                fileobj.update(schema=playbook_schema)
                 returnedfiles.append(fileobj)
         
         return returnedfiles
