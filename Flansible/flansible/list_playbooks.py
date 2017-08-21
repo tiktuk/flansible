@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader, meta
 
 import celery_runner
 
-from tdh_utils import playbook_as_schema
+from tdh_utils import playbook_as_schema, playbook_metadata
 
 
 class Playbooks(Resource):
@@ -47,7 +47,7 @@ class Playbooks(Resource):
                 playbook_schema, _, _, error = playbook_as_schema(
                     fileobj['playbook_dir'],
                     fileobj['playbook'],
-                    var_prefix='tdh'
+                    var_prefix='USER'
                 )
                 
                 fileobj.update(schema=playbook_schema)
@@ -55,6 +55,9 @@ class Playbooks(Resource):
                 if error:
                     fileobj.update(error=error)
                 
+                metadata = playbook_metadata(fileobj['playbook_dir'], fileobj['playbook'])
+                fileobj.update(metadata=metadata)
+
                 returnedfiles.append(fileobj)
         
         return returnedfiles
