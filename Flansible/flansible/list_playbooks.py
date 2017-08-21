@@ -51,13 +51,13 @@ class Playbooks(Resource):
                 )
                 
                 fileobj.update(schema=playbook_schema)
-
+                
                 if error:
                     fileobj.update(error=error)
                 
                 metadata = playbook_metadata(fileobj['playbook_dir'], fileobj['playbook'])
                 fileobj.update(metadata=metadata)
-
+                
                 returnedfiles.append(fileobj)
         
         return returnedfiles
