@@ -2,7 +2,7 @@ import os
 from flask_restful import Resource, Api
 from flask_restful_swagger import swagger
 from flansible import app
-from flansible import api, app, celery, playbook_root, auth
+from flansible import api, app, celery, playbook_root, auth, global_meta
 from flansible import verify_password, get_inventory_access
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 from jinja2 import Environment, FileSystemLoader, meta
@@ -26,7 +26,7 @@ class Playbooks(Resource):
     @auth.login_required
     def get(self):
         yamlfiles = []
-        print("listing playbooks in " + playbook_root)
+        
         for root, dirs, files in os.walk(playbook_root):
             for name in files:
                 if name.endswith((".yaml", ".yml")):
@@ -55,7 +55,12 @@ class Playbooks(Resource):
                 if error:
                     fileobj.update(error=error)
                 
-                metadata = playbook_metadata(fileobj['playbook_dir'], fileobj['playbook'])
+                metadata = playbook_metadata(
+                    fileobj['playbook_dir'],
+                    fileobj['playbook'],
+                    global_meta=global_meta
+                )
+                
                 fileobj.update(metadata=metadata)
                 
                 returnedfiles.append(fileobj)
