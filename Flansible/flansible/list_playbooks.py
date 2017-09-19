@@ -44,16 +44,19 @@ class Playbooks(Resource):
                 pass
             else:
                 # Parse the playbook for variables
-                playbook_schema, _, _, error = playbook_as_schema(
+                pls = playbook_as_schema(
                     fileobj['playbook_dir'],
                     fileobj['playbook'],
-                    var_prefix='USER'
+                    dict_name='USER'
                 )
+                
+                playbook_schema = pls['schema']
+                errors = pls['errors']
                 
                 fileobj.update(schema=playbook_schema)
                 
-                if error:
-                    fileobj.update(error=error)
+                if errors:
+                    fileobj.update(error=errors)
                 
                 metadata = playbook_metadata(
                     fileobj['playbook_dir'],
