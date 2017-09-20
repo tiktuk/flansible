@@ -36,9 +36,10 @@ config = SafeConfigParser()
 config.read('config.ini')
 
 ansible_config = SafeConfigParser()
+
 try:
     ansible_config.read('/etc/ansible/ansible.cfg')
-    ansible_default_inventory = config.get("Defaults", "inventory")
+    ansible_default_inventory = config.get("Default", "inventory")
 except:
     ansible_default_inventory = '/etc/ansible/hosts'
 
