@@ -30,6 +30,7 @@ class AnsibleTaskOutput(Resource):
             result = task.info['output']
         else:
             result = task.info['output']
+        
         #result_out = task.info.replace('\n', "<br>")
         #result = result.replace('\n', '<br>')
         #return result, 200, {'Content-Type': 'text/html; charset=utf-8'}
