@@ -1,0 +1,16 @@
+# Flansible
+ansible==2.4.0.0
+celery==4.1.0
+Flask==0.12.2
+Flask-HTTPAuth==3.2.3
+Flask-RESTful==0.3.6
+flask-restful-swagger==0.19
+redis==2.10.6
+Flask-Cors==3.0.3
+
+# Forks of dependencies
+-e git+https://github.com/tiktuk/flower.git#egg=flower
+-e git+https://github.com/tiktuk/jinja2schema.git#egg=jinja2schema
+
+# TDH Utils
+-e hg+https://bitbucket.org/tdh-net/tdh-utils#egg=tdh_utils
