@@ -2,7 +2,7 @@ import os
 from flask_restful import Resource, Api
 from flask_restful_swagger import swagger
 from flask_restful import reqparse
-from flansible import app
+from flansible import app, ansible_project_dir
 from flansible import api, app, celery, auth, ansible_default_inventory, get_inventory_access, task_timeout
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 import celery_runner
@@ -108,7 +108,7 @@ class RunAnsiblePlaybook(Resource):
             #extra_vars_string = str.format("  --extra-vars \'{0}\'", (json.dumps(extra_vars)))
             extra_vars_string = " --extra-vars '%s'" % (json.dumps(extra_vars).replace("'", "'\\''"))
 
-        command = str.format("cd {0};ansible-playbook {1}{2}{3}{4}", playbook_dir, playbook, become_string, inventory, extra_vars_string)
+        command = str.format("cd {0};ansible-playbook {1}{2}{3}{4}", ansible_project_dir, playbook_full_path, become_string, inventory, extra_vars_string)
         task_result = celery_runner.do_long_running_task.apply_async([command], soft=task_timeout, hard=task_timeout)
         result = {'task_id': task_result.id}
         return result
