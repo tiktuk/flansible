@@ -57,7 +57,7 @@ api = swagger.docs(Api(app), apiVersion='0.1')
 celery = Celery(app.name, broker=app.config['broker_url'], backend=app.config['result_backend'])
 celery.control.time_limit('do_long_running_task', soft=900, hard=900, reply=True)
 celery.conf.update(app.config)
-celery.Task.resultrepr_maxsize = 20000
+celery.Task.resultrepr_maxsize = config.get("Default", "max_result_size")
 
 inventory_access = []
 
