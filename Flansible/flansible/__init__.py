@@ -36,6 +36,7 @@ config = SafeConfigParser(
     defaults={
         'playbook_filter': '.yml',
         'playbook_dir_filter': None,
+        'max_result_size': 20000,
     }
 )
 
