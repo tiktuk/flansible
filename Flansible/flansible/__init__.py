@@ -32,7 +32,13 @@ auth = HTTPBasicAuth()
 
 this_path = sys.path[0]
 
-config = SafeConfigParser()
+config = SafeConfigParser(
+    defaults={
+        'playbook_filter': '.yml',
+        'playbook_dir_filter': None,
+    }
+)
+
 config.read('config.ini')
 
 ansible_config = SafeConfigParser()
@@ -49,6 +55,7 @@ str_task_timeout = config.get("Default", "CELERY_TASK_TIMEOUT")
 playbook_root = config.get("Default", "playbook_root")
 ansible_project_dir = config.get("Default", "ansible_project_dir")
 playbook_filter = config.get("Default", "playbook_filter")
+playbook_dir_filter = config.get("Default", "playbook_dir_filter")
 global_meta = config.get("Default", "global_meta")
 task_timeout = int(str_task_timeout)
 

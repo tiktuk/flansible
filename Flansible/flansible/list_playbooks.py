@@ -2,7 +2,7 @@ import os
 from flask_restful import Resource, Api
 from flask_restful_swagger import swagger
 from flansible import app
-from flansible import api, app, celery, playbook_root, auth, global_meta
+from flansible import api, app, celery, playbook_root, auth, global_meta, playbook_filter, playbook_dir_filter
 from flansible import verify_password, get_inventory_access
 from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 from jinja2 import Environment, FileSystemLoader, meta
@@ -10,6 +10,16 @@ from jinja2 import Environment, FileSystemLoader, meta
 import celery_runner
 
 from tdh_utils import playbook_as_schema, playbook_metadata
+
+
+def do_include_playbook(directory, name):
+    '''
+        Include files named as set in playbook_filter
+        or files ending in .yml in the directory named in playbook_dir_filter
+    '''
+    
+    return name.find(playbook_filter) != -1 or \
+        playbook_dir_filter is not None and directory.find(playbook_dir_filter) != -1 and name.endswith(('.yaml', '.yml'))
 
 
 class Playbooks(Resource):
@@ -29,7 +39,7 @@ class Playbooks(Resource):
         
         for root, dirs, files in os.walk(playbook_root):
             for name in files:
-                if name.endswith((".yaml", ".yml")):
+                if do_include_playbook(root, name):
                     fileobj = {'playbook': name, 'playbook_dir': root}
                     yamlfiles.append(fileobj)
         
