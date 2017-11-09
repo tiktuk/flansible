@@ -3,9 +3,9 @@ ansible==2.4.0.0
 Flask==0.12.2
 Flask-HTTPAuth==3.2.3
 Flask-RESTful==0.3.6
-flask-restful-swagger==0.19
 redis==2.10.6
 Flask-Cors==3.0.3
+git+https://github.com/rantav/flask-restful-swagger.git#egg=flask-restful-swagger
 
 # Forks of dependencies
 -e git+https://github.com/tiktuk/flower.git#egg=flower
