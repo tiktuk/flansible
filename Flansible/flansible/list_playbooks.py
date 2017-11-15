@@ -53,28 +53,28 @@ class Playbooks(Resource):
             elif fileobj['playbook_dir'].endswith('vars'):
                 pass
             else:
-                # Parse the playbook for variables
-                pls = playbook_as_schema(
-                    fileobj['playbook_dir'],
-                    fileobj['playbook'],
-                    dict_name='USER'
-                )
-                
-                playbook_schema = pls['schema']
-                errors = pls['errors']
-                
-                fileobj.update(schema=playbook_schema)
-                
-                if errors:
-                    fileobj.update(error=errors)
-                
+                # Get metadata
                 metadata = playbook_metadata(
                     fileobj['playbook_dir'],
                     fileobj['playbook'],
                     global_meta=global_meta
                 )
                 
+                # Parse the playbook for variables
+                pls = playbook_as_schema(
+                    fileobj['playbook_dir'],
+                    fileobj['playbook'],
+                    dict_name='USER',
+                    metadata=metadata
+                )
+                
+                # Update our playlist dictionary
                 fileobj.update(metadata=metadata)
+                fileobj.update(schema=pls['schema'])
+                
+                # Add any errors
+                if pls['errors']:
+                    fileobj.update(error=pls['errors'])
                 
                 returnedfiles.append(fileobj)
         
