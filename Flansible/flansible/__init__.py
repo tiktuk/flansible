@@ -8,9 +8,9 @@ import json
 from threading import Thread
 from subprocess import Popen, PIPE
 import subprocess
-from Queue import Queue, Empty
+from queue import Queue, Empty
 from datetime import datetime
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 from flask import render_template
 from flask import Flask, request, render_template, session, flash, redirect, url_for, jsonify
 from flask_httpauth import HTTPBasicAuth
@@ -20,7 +20,7 @@ from flask_cors import CORS
 import celery.events.state
 from celery import Celery
 
-from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
+from flansible.ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 
 
 #Setup queue for celery
@@ -35,7 +35,7 @@ this_path = sys.path[0]
 config = SafeConfigParser(
     defaults={
         'playbook_filter': '.yml',
-        'playbook_dir_filter': None,
+        'playbook_dir_filter': '',
         'max_result_size': 20000,
     }
 )

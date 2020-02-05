@@ -1,5 +1,5 @@
 from flansible import task_timeout
-import celery_runner
+import flansible.celery_runner
 
 class FlansibleGit:
     @staticmethod

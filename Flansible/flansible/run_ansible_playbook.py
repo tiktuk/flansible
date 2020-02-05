@@ -4,9 +4,9 @@ from flask_restful_swagger import swagger
 from flask_restful import reqparse
 from flansible import app, ansible_project_dir
 from flansible import api, app, celery, auth, ansible_default_inventory, get_inventory_access, task_timeout
-from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
-import celery_runner
-from flansible_git import FlansibleGit
+from flansible.ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
+import flansible.celery_runner
+from flansible.flansible_git import FlansibleGit
 import json
 
 class RunAnsiblePlaybook(Resource):

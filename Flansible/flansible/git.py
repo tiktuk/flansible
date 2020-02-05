@@ -4,9 +4,9 @@ from flask_restful_swagger import swagger
 
 from flansible import app
 from flansible import api, app, celery, auth
-from flansible_git import FlansibleGit
-from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
-import celery_runner
+from flansible.flansible_git import FlansibleGit
+from flansible.ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
+import flansible.celery_runner
 
 class git(Resource):
     @swagger.operation(

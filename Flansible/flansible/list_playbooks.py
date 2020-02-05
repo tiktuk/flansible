@@ -4,10 +4,10 @@ from flask_restful_swagger import swagger
 from flansible import app
 from flansible import api, app, celery, playbook_root, auth, global_meta, playbook_filter, playbook_dir_filter
 from flansible import verify_password, get_inventory_access
-from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
+from flansible.ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
 from jinja2 import Environment, FileSystemLoader, meta
 
-import celery_runner
+import flansible.celery_runner
 
 from tdh_utils import playbook_as_schema, playbook_metadata
 

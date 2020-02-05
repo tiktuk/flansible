@@ -2,8 +2,8 @@ from flask_restful import Resource, Api
 from flask_restful_swagger import swagger
 from flansible import app
 from flansible import api, app, celery, auth
-from ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
-import celery_runner
+from flansible.ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
+import flansible.celery_runner
 
 class AnsibleTaskStatus(Resource):
     @swagger.operation(
