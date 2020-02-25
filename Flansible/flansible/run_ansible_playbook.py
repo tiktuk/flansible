@@ -5,7 +5,7 @@ from flask_restful import reqparse
 from flansible import app, ansible_project_dir
 from flansible import api, app, celery, auth, ansible_default_inventory, get_inventory_access, task_timeout
 from flansible.ModelClasses import AnsibleCommandModel, AnsiblePlaybookModel, AnsibleRequestResultModel, AnsibleExtraArgsModel
-import flansible.celery_runner
+from flansible import celery_runner
 from flansible.flansible_git import FlansibleGit
 import json
 
@@ -37,6 +37,7 @@ class RunAnsiblePlaybook(Resource):
     )
     @auth.login_required
     def post(self):
+        #import pudb; pudb.set_trace()
         parser = reqparse.RequestParser()
         parser.add_argument('playbook_dir',
                             type=str, help='folder where playbook file resides', required=True)

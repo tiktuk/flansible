@@ -4,11 +4,10 @@ from subprocess import Popen, PIPE
 from flansible import api, app, celery, task_timeout
 
 
-
 @celery.task(bind=True, soft_time_limit=task_timeout, time_limit=(task_timeout+10))
 def do_long_running_task(self, cmd, type='Ansible'):
     with app.app_context():
-        
+        #import pudb; pudb.set_trace()
         has_error = False
         result = None
         output = ""
@@ -19,8 +18,10 @@ def do_long_running_task(self, cmd, type='Ansible'):
         print(str.format("About to execute: {0}", cmd))
         proc = Popen([cmd], stdout=PIPE, stderr=subprocess.STDOUT, shell=True)
         for line in iter(proc.stdout.readline, ''):
-            print(str(line))
-            output = output + line
+            #print(str(line))
+            #print(line.decode('utf-8'))
+            #output = output + line
+            output = output + line.decode('utf-8')
             self.update_state(state='PROGRESS', meta={'output': output,'description': "",'returncode': None})
 
         return_code = proc.poll()
