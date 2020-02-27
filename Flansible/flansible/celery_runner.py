@@ -28,11 +28,11 @@ def do_long_running_task(self, cmd, type='Ansible'):
 
         return_code = proc.poll()
         if return_code is 0:
-            #meta = {'output': output, 
-            #            'returncode': proc.returncode,
-            #            'description': ""
-            #        }
-            meta = {'output': output}
+            meta = {'output': output, 
+                        'returncode': proc.returncode,
+                        'description': ""
+                    }
+            #meta = {'output': output}
             self.update_state(state='FINISHED',
                               meta=meta)
         elif return_code is not 0:

@@ -35,6 +35,7 @@ class Playbooks(Resource):
     )
     @auth.login_required
     def get(self):
+        #import pudb; pudb.set_trace()
         yamlfiles = []
         
         for root, dirs, files in os.walk(playbook_root):
